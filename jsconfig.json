@@ -20,6 +20,9 @@
             "@/contexts/*": [
                 "contexts/*"
             ],
+            "@/middleware/*": [
+                "middleware/*"
+            ]
         }
     },
     "exclude": [

@@ -17,8 +17,8 @@ export default function Home() {
   };
 
   async function slackAuth(){
-    let authUrl = `https://slack.com/openid/connect/authorize?response_type=code&scope=openid%20profile%20email&client_id=2365887896900.2359697771138&state=${signerAddress}&nonce=${signerAddress}&redirect_uri=${encodeURIComponent('https://5ff4c329614e.ngrok.io/api/slackcb')}`;
-    window.open(authUrl, '_blank').focus();
+    let authUrl = `https://slack.com/openid/connect/authorize?response_type=code&scope=openid%20profile%20email&client_id=2365887896900.2359697771138&state=${signerAddress}&nonce=${signerAddress}&redirect_uri=${encodeURIComponent('https://bridge.theconvo.space/api/slackcb')}`;
+    window.location.href = authUrl;
   }
 
   return (

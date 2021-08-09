@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "export": "next export",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tunnel": "lt --port 8000 --subdomain convo"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",
@@ -19,7 +20,9 @@
     "ethers": "^5.4.4",
     "framer-motion": "4",
     "jsonwebtoken": "^8.5.1",
+    "mongo": "^0.1.0",
     "next": "11.0.1",
+    "next-connect": "^0.10.2",
     "next-pwa": "^5.2.24",
     "node-fetch": "^2.6.1",
     "react": "17.0.2",
