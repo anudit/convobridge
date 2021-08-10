@@ -14,10 +14,41 @@ export default function Home() {
   const { connectWallet, signerAddress, disconnectWallet } = web3Context;
   const [ bridgeData, setBridgeData ] = useState(undefined);
 
+  const [ loadingType, setLoadingType ] = useState('');
+
   const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
-  const handleTelegramResponse = response => {
-    console.log(response);
+  async function sendData(url = '', data = {}, method="GET") {
+    const response = await fetch(url, {
+      method,
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+    return response.json();
+  }
+
+  const handleTelegramResponse = async (response) => {
+    await sendData('/api/bridge?type=telegram&ethAddress='+signerAddress, response, "POST");
+    let data = await fetch('/api/bridge?address='+signerAddress).then(data=>{return data.json()});
+    setBridgeData(data);
+    console.log(data);
+    setLoadingType('');
+  };
+
+  const disconnectAuth = async (type) => {
+    setLoadingType(type);
+    await sendData('/api/bridge?type='+type+'&ethAddress='+signerAddress, {}, "DELETE");
+    let data = await fetch('/api/bridge?address='+signerAddress).then(data=>{return data.json()});
+    setBridgeData(data);
+    console.log(data);
+    setLoadingType('');
   };
 
   async function slackAuth(){
@@ -43,7 +74,6 @@ export default function Home() {
     }
     fetchData();
   }, [signerAddress]);
-
 
   return (
     <>
@@ -82,18 +112,44 @@ export default function Home() {
             {
               signerAddress !== "" && Boolean(bridgeData) === true ? (
                 <Flex direction="column">
-                  <TelegramLoginButton dataOnauth={handleTelegramResponse} botName="Convospacebot" />
+                  {
+                    Boolean(bridgeData?.telegram) === true ? (
+                      <Button isLoading={loadingType === 'telegram'} onClick={()=>{disconnectAuth('telegram')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
+                        <DisconnectIcon boxSize={4} mr={2} />
+                        Disconnect Telegram
+                      </Button>
+                    ) : (
+                      <TelegramLoginButton dataOnauth={handleTelegramResponse} botName="Convospacebot" />
+                    )
+                  }
                   <br/>
-
-                  <Button onClick={slackAuth} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
-                    <SlackIcon boxSize={8} />
-                    Log in with Slack
-                  </Button>
+                  {
+                    Boolean(bridgeData?.slack) === true ? (
+                      <Button isLoading={loadingType === 'slack'} onClick={()=>{disconnectAuth('slack')}} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#025e8c"}}>
+                        <DisconnectIcon boxSize={4} mr={2} />
+                        Disconnect Slack
+                      </Button>
+                    ) : (
+                      <Button onClick={slackAuth} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
+                        <SlackIcon boxSize={10} />
+                        Log in with Slack
+                      </Button>
+                    )
+                  }
                   <br/>
-                  <Button onClick={discordAuth} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100" _hover={{backgroundColor:"#3c45a5"}}>
-                    <DiscordIcon boxSize={5} mr={4}/>
-                    Log in with Discord
-                  </Button>
+                  {
+                    Boolean(bridgeData?.discord) === true ? (
+                      <Button isLoading={loadingType === 'discord'} onClick={()=>{disconnectAuth('discord')}} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
+                        <DisconnectIcon boxSize={4} mr={2} />
+                        Disconnect Discord
+                      </Button>
+                    ) : (
+                      <Button onClick={discordAuth} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100" _hover={{backgroundColor:"#3c45a5"}}>
+                        <DiscordIcon boxSize={5} mr={4}/>
+                        Log in with Discord
+                      </Button>
+                    )
+                  }
                 </Flex>
               ) : (<></>)
             }

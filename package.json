@@ -8,7 +8,7 @@
     "start": "next start",
     "export": "next export",
     "lint": "next lint",
-    "tunnel": "lt --port 8000 --subdomain convo"
+    "tunnel": "lt --port 8000 --subdomain convo2"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",
