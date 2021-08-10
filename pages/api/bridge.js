@@ -5,9 +5,11 @@ handler.use(middleware);
 
 export default handler.get(async (req, res) => {
 
+    const { address } = req.query;
+
     try {
 
-        if (req.method === "GET" && req.query.includes('address') === true) {
+        if (req.method === "GET" && Boolean(address) === true) {
 
             const snapshot = await req.db.collection("bridge").find( {
                 ethAddress: req.query?.address
@@ -29,6 +31,7 @@ export default handler.get(async (req, res) => {
         }
 
     } catch (error) {
+        console.log(error);
         res.status(500).json({ success: false, message: error});
 
     }
