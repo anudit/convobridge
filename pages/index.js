@@ -125,7 +125,7 @@ export default function Home() {
                   <br/>
                   {
                     Boolean(bridgeData?.slack) === true ? (
-                      <Button isLoading={loadingType === 'slack'} onClick={()=>{disconnectAuth('slack')}} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#025e8c"}}>
+                      <Button isLoading={loadingType === 'slack'} onClick={()=>{disconnectAuth('slack')}} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
                         <DisconnectIcon boxSize={4} mr={2} />
                         Disconnect Slack
                       </Button>
@@ -139,7 +139,7 @@ export default function Home() {
                   <br/>
                   {
                     Boolean(bridgeData?.discord) === true ? (
-                      <Button isLoading={loadingType === 'discord'} onClick={()=>{disconnectAuth('discord')}} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
+                      <Button isLoading={loadingType === 'discord'} onClick={()=>{disconnectAuth('discord')}} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100"  _hover={{backgroundColor:"#3c45a5"}}>
                         <DisconnectIcon boxSize={4} mr={2} />
                         Disconnect Discord
                       </Button>
