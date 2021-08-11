@@ -14,7 +14,8 @@ export default handler.all(async (req, res) => {
         else {
             res.status(200).json({
                 success: true,
-                ethAddress: snapshot[0]?.ethAddress
+                ethAddress: snapshot[0]?.ethAddress,
+                state: snapshot[0]?.state
             });
         }
     }
@@ -26,7 +27,8 @@ export default handler.all(async (req, res) => {
         else {
             res.status(200).json({
                 success: true,
-                ethAddress: snapshot[0]?.ethAddress
+                ethAddress: snapshot[0]?.ethAddress,
+                state: snapshot[0]?.state
             });
         }
     }
@@ -39,7 +41,8 @@ export default handler.all(async (req, res) => {
         else {
             res.status(200).json({
                 success: true,
-                ethAddress: snapshot[0]?.ethAddress
+                ethAddress: snapshot[0]?.ethAddress,
+                state: snapshot[0]?.state
             });
         }
     }
