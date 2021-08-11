@@ -14,9 +14,7 @@ export default handler.all(async (req, res) => {
         else {
             res.status(200).json({
                 success: true,
-                discord: Object.keys(snapshot[0]).includes('discordData') === true ? (snapshot[0].discordData?.username + "#"  + snapshot[0].discordData?.discriminator) : false,
-                slack: Object.keys(snapshot[0]).includes('slackData') === true ? (snapshot[0].slackData?.name) : false,
-                telegram: Object.keys(snapshot[0]).includes('telegramData') === true ? (snapshot[0].telegramData?.username) : false
+                ethAddress: snapshot[0]?.ethAddress
             });
         }
     }
@@ -28,9 +26,7 @@ export default handler.all(async (req, res) => {
         else {
             res.status(200).json({
                 success: true,
-                discord: Object.keys(snapshot[0]).includes('discordData') === true ? (snapshot[0].discordData?.username + "#"  + snapshot[0].discordData?.discriminator) : false,
-                slack: Object.keys(snapshot[0]).includes('slackData') === true ? (snapshot[0].slackData?.name) : false,
-                telegram: Object.keys(snapshot[0]).includes('telegramData') === true ? (snapshot[0].telegramData?.username) : false
+                ethAddress: snapshot[0]?.ethAddress
             });
         }
     }
@@ -43,9 +39,7 @@ export default handler.all(async (req, res) => {
         else {
             res.status(200).json({
                 success: true,
-                discord: Object.keys(snapshot[0]).includes('discordData') === true ? (snapshot[0].discordData?.username + "#"  + snapshot[0].discordData?.discriminator) : false,
-                slack: Object.keys(snapshot[0]).includes('slackData') === true ? (snapshot[0].slackData?.name) : false,
-                telegram: Object.keys(snapshot[0]).includes('telegramData') === true ? (snapshot[0].telegramData?.username) : false
+                ethAddress: snapshot[0]?.ethAddress
             });
         }
     }
