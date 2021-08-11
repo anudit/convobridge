@@ -29,10 +29,10 @@ export default handler.all(async (req, res) => {
         else if (req.method === "POST" ){
 
             const { type, ethAddress } = req.query;
-            const { telegramData } = req.body;
+            const telegramData = req.body;
 
             if (type === 'telegram') {
-                const snapshot = await req.db.collection("bridge").find({ ethAddress } ).toArray();
+                const snapshot = await req.db.collection("bridge").find({ ethAddress }).toArray();
 
                 if (snapshot.length === 0){
 
