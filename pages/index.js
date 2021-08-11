@@ -113,10 +113,10 @@ export default function Home() {
               signerAddress !== "" && Boolean(bridgeData) === true ? (
                 <Flex direction="column">
                   {
-                    Boolean(bridgeData?.telegram) === true ? (
+                    Boolean(bridgeData?.telegram) !== false ? (
                       <Button isLoading={loadingType === 'telegram'} onClick={()=>{disconnectAuth('telegram')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
                         <DisconnectIcon boxSize={4} mr={2} />
-                        Disconnect Telegram
+                        Telegram {bridgeData?.telegram}
                       </Button>
                     ) : (
                       <TelegramLoginButton dataOnauth={handleTelegramResponse} botName="Convospacebot" />
@@ -124,10 +124,10 @@ export default function Home() {
                   }
                   <br/>
                   {
-                    Boolean(bridgeData?.slack) === true ? (
+                    Boolean(bridgeData?.slack) !== false ? (
                       <Button isLoading={loadingType === 'slack'} onClick={()=>{disconnectAuth('slack')}} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
                         <DisconnectIcon boxSize={4} mr={2} />
-                        Disconnect Slack
+                        Slack {bridgeData?.slack}
                       </Button>
                     ) : (
                       <Button onClick={slackAuth} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
@@ -138,10 +138,10 @@ export default function Home() {
                   }
                   <br/>
                   {
-                    Boolean(bridgeData?.discord) === true ? (
+                    Boolean(bridgeData?.discord) !== false ? (
                       <Button isLoading={loadingType === 'discord'} onClick={()=>{disconnectAuth('discord')}} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100"  _hover={{backgroundColor:"#3c45a5"}}>
                         <DisconnectIcon boxSize={4} mr={2} />
-                        Disconnect Discord
+                        Discord {bridgeData?.discord}
                       </Button>
                     ) : (
                       <Button onClick={discordAuth} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100" _hover={{backgroundColor:"#3c45a5"}}>
