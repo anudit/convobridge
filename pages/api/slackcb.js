@@ -1,14 +1,10 @@
 import fetch, { Headers } from 'node-fetch';
 import jwt from 'jsonwebtoken';
+import { updateAuthData } from '@/lib/bridge';
 
-import nextConnect from 'next-connect';
-import middleware from '@/middleware/database';
-const handler = nextConnect();
-handler.use(middleware);
+export default async (req, res) => {
 
-export default handler.get(async (req, res) => {
-
-  let SLACK_CLIENT_SECRET = process.env.SLACK_CLIENT_SECRET;
+  let {SLACK_CLIENT_SECRET, NEXT_PUBLIC_SITE_URL} = process.env;
   let { code }  = req.query;
 
   var myHeaders = new Headers();
@@ -19,7 +15,7 @@ export default handler.get(async (req, res) => {
   urlencoded.append("client_secret", SLACK_CLIENT_SECRET);
   urlencoded.append("code", code);
   urlencoded.append("grant_type", "authorization_code");
-  urlencoded.append("redirect_uri", "https://bridge.theconvo.space/api/slackcb");
+  urlencoded.append("redirect_uri", NEXT_PUBLIC_SITE_URL + '/api/slackcb');
 
   var requestOptions = {
     method: 'POST',
@@ -39,24 +35,8 @@ export default handler.get(async (req, res) => {
 
     let slackData = jwt.decode(token);
 
-    const snapshot = await req.db.collection("bridge").find( { ethAddress } ).toArray();
-
-    if (snapshot.length === 0){
-      await req.db.collection("bridge").insertOne( {
-        ethAddress,
-        slackData
-      } );
-      res.status(200).redirect('/');
-    }
-    else if(snapshot.length > 0 ) {
-
-      await req.db.collection("bridge").updateOne(
-        { ethAddress },
-        { $set: { slackData } }
-      );
-      res.status(200).redirect('/');
-
-    }
+    await updateAuthData('slack', ethAddress, slackData);
+    res.status(200).redirect('/');
   }
 
-});
+};

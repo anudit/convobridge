@@ -1,10 +1,7 @@
+import { updateAuthData } from '@/lib/bridge';
 import fetch, { Headers } from 'node-fetch';
-import nextConnect from 'next-connect';
-import middleware from '@/middleware/database';
-const handler = nextConnect();
-handler.use(middleware);
 
-export default handler.get(async (req, res) => {
+export default async (req, res) => {
 
     let { DISCORD_CLIENT_SECRET,  NEXT_PUBLIC_SITE_URL } = process.env;
 
@@ -45,23 +42,7 @@ export default handler.get(async (req, res) => {
 
     let { state : ethAddress } = req.query;
 
-    const snapshot = await req.db.collection("bridge").find( { ethAddress } ).toArray();
+    await updateAuthData('discord', ethAddress, discordData);
+    res.status(200).redirect('/');
 
-    if (snapshot.length === 0){
-        await req.db.collection("bridge").insertOne( {
-            ethAddress,
-            discordData
-        } );
-        res.status(200).redirect('/');
-    }
-    else if(snapshot.length > 0 ) {
-
-        await req.db.collection("bridge").updateOne(
-            { ethAddress },
-            { $set: { discordData } }
-        );
-        res.status(200).redirect('/');
-
-    }
-
-});
+};
