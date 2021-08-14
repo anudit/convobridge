@@ -59,3 +59,15 @@ export const DisconnectIcon = createIcon({
     )
 });
 
+export const ZoomIcon = createIcon({
+    displayName: 'ZoomIcon',
+    viewBox: '0 0 1329.1 1329.1',
+    path: (
+        <g>
+            <path d="M664.5 0a664.5 664.5 0 110 1329 664.5 664.5 0 010-1329z" fill="#e5e5e4" fillRule="nonzero"/>
+            <path fill="#fff" d="M664.5 13a651.6 651.6 0 110 1303.1 651.6 651.6 0 010-1303.2z"/>
+            <path d="M664.5 65.2a599.3 599.3 0 110 1198.7 599.3 599.3 0 010-1198.7z" fill="#4a8cff" fillRule="nonzero"/>
+            <path fill="#fff" d="M273.5 476.8v281.6c.3 63.7 52.3 115 115.7 114.7h410.6a21 21 0 0021-20.8V570.7c-.2-63.7-52.2-115-115.7-114.7H294.6a21 21 0 00-21 20.8zM847 586.6l169.5-123.8c14.7-12.2 26.1-9.1 26.1 13v377.5c0 25.1-14 22.1-26.1 13L847 742.7v-156z"/>
+        </g>
+    )
+});

@@ -28,7 +28,7 @@ export default async (req, res) => {
   let result = await response.json();
 
   if (Boolean(result?.ok) === false) {
-    res.status(200).json({ ...result  });
+    return res.status(200).json({ ...result  });
   }
   else {
     let {id_token : token, state: ethAddress } = result;
@@ -36,7 +36,7 @@ export default async (req, res) => {
     let slackData = jwt.decode(token);
 
     await updateAuthData('slack', ethAddress, slackData);
-    res.status(200).redirect('/');
+    return res.status(200).redirect('/');
   }
 
 };

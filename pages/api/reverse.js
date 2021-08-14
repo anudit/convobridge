@@ -4,6 +4,6 @@ export default async (req, res) => {
 
     let { type, id } = req.query;
     const resp = await bridgeReverseLookup(type, id);
-    res.status(200).json(resp);
+    return res.status(200).json(resp);
 
 };

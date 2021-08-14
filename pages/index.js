@@ -5,18 +5,20 @@ import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { Web3Context } from "@/contexts/Web3Context";
 import { truncateAddress } from "@/utils/stringUtils";
-import { DisconnectIcon, DiscordIcon, SlackIcon } from "@/public/icons";
+import { DisconnectIcon, DiscordIcon, SlackIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
+
 
 export default function Home() {
 
   const web3Context = useContext(Web3Context);
   const { connectWallet, signerAddress, disconnectWallet } = web3Context;
   const [ bridgeData, setBridgeData ] = useState(undefined);
+  const NEXT_PUBLIC_ZOOM_CLIENT_ID = process.env.NEXT_PUBLIC_ZOOM_CLIENT_ID;
+  const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
   const [ loadingType, setLoadingType ] = useState('');
 
-  const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
   async function sendData(url = '', data = {}, method="GET") {
     const response = await fetch(url, {
@@ -59,8 +61,14 @@ export default function Home() {
   async function discordAuth(){
     let reduri = NEXT_PUBLIC_SITE_URL + '/api/discordcb';
     let red = encodeURIComponent(reduri);
-    console.log(reduri, red);
     let authUrl = `https://discord.com/api/oauth2/authorize?client_id=874563415228702751&redirect_uri=${red}&response_type=code&scope=identify%20email&state=${signerAddress}`;
+    window.location.href = authUrl;
+  }
+
+  async function zoomAuth(){
+    let reduri = NEXT_PUBLIC_SITE_URL + '/api/zoomcb';
+    let red = encodeURIComponent(reduri);
+    let authUrl = `https://zoom.us/oauth/authorize?client_id=${NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${red}&response_type=code&scope=user%3Aread&state=${signerAddress}`;
     window.location.href = authUrl;
   }
 
@@ -147,6 +155,20 @@ export default function Home() {
                       <Button onClick={discordAuth} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100" _hover={{backgroundColor:"#3c45a5"}}>
                         <DiscordIcon boxSize={5} mr={4}/>
                         Log in with Discord
+                      </Button>
+                    )
+                  }
+                  <br/>
+                  {
+                    Boolean(bridgeData?.zoom) !== false ? (
+                      <Button isLoading={loadingType === 'zoom'} onClick={()=>{disconnectAuth('zoom')}} fontWeight="100" backgroundColor="#0e71eb" color="white" borderRadius="100"  _hover={{backgroundColor:"#0957b7"}}>
+                        <DisconnectIcon boxSize={4} mr={2} />
+                        Zoom {truncateAddress(bridgeData?.zoom)}
+                      </Button>
+                    ) : (
+                      <Button onClick={zoomAuth} fontWeight="100" backgroundColor="#0e71eb" color="white" borderRadius="100" _hover={{backgroundColor:"#0957b7"}}>
+                        <ZoomIcon boxSize={5} mr={4}/>
+                        Log in with Zoom
                       </Button>
                     )
                   }
