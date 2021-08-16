@@ -5,7 +5,7 @@ import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { Web3Context } from "@/contexts/Web3Context";
 import { truncateAddress } from "@/utils/stringUtils";
-import { DisconnectIcon, DiscordIcon, SlackIcon, ZoomIcon } from "@/public/icons";
+import { DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
 
 
@@ -69,6 +69,13 @@ export default function Home() {
     let reduri = NEXT_PUBLIC_SITE_URL + '/api/zoomcb';
     let red = encodeURIComponent(reduri);
     let authUrl = `https://zoom.us/oauth/authorize?client_id=${NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${red}&response_type=code&scope=user%3Aread&state=${signerAddress}`;
+    window.location.href = authUrl;
+  }
+
+  async function spotifyAuth(){
+    let reduri = NEXT_PUBLIC_SITE_URL + '/api/spotifycb';
+    let red = encodeURIComponent(reduri);
+    let authUrl = `https://accounts.spotify.com/authorize?client_id=bd08b95348ab43a8ae061c0a28379642&redirect_uri=${red}&response_type=code&scope=user-read-private%20user-read-email&state=${signerAddress}`;
     window.location.href = authUrl;
   }
 
@@ -169,6 +176,20 @@ export default function Home() {
                       <Button onClick={zoomAuth} fontWeight="100" backgroundColor="#0e71eb" color="white" borderRadius="100" _hover={{backgroundColor:"#0957b7"}}>
                         <ZoomIcon boxSize={5} mr={4}/>
                         Log in with Zoom
+                      </Button>
+                    )
+                  }
+                  <br/>
+                  {
+                    Boolean(bridgeData?.spotify) !== false ? (
+                      <Button isLoading={loadingType === 'spotify'} onClick={()=>{disconnectAuth('spotify')}} fontWeight="100" backgroundColor="#1db954" color="white" borderRadius="100"  _hover={{backgroundColor:"#168d40"}}>
+                        <DisconnectIcon boxSize={4} mr={2} />
+                        Spotify {truncateAddress(bridgeData?.spotify)}
+                      </Button>
+                    ) : (
+                      <Button onClick={spotifyAuth} fontWeight="100" backgroundColor="#1db954" color="white" borderRadius="100" _hover={{backgroundColor:"#168d40"}}>
+                        <SpotifyIcon boxSize={5} mr={4}/>
+                        Log in with Spotify
                       </Button>
                     )
                   }
