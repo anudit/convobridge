@@ -80,7 +80,7 @@ export default function Home() {
   }
 
   async function twitchAuth(){
-    let reduri = NEXT_PUBLIC_SITE_URL + '/api/spotifycb';
+    let reduri = NEXT_PUBLIC_SITE_URL + '/api/twitchcb';
     let red = encodeURIComponent(reduri);
     let authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=ghb2na9qbwpfvn2557fetvll6lxf1p&redirect_uri=${red}&response_type=code&scope=user:edit%20user:read:email&state=${signerAddress}`;
     window.location.href = authUrl;
