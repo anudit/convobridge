@@ -5,7 +5,7 @@ import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { Web3Context } from "@/contexts/Web3Context";
 import { truncateAddress } from "@/utils/stringUtils";
-import { DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, ZoomIcon } from "@/public/icons";
+import { DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, TwitchIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
 
 
@@ -76,6 +76,13 @@ export default function Home() {
     let reduri = NEXT_PUBLIC_SITE_URL + '/api/spotifycb';
     let red = encodeURIComponent(reduri);
     let authUrl = `https://accounts.spotify.com/authorize?client_id=bd08b95348ab43a8ae061c0a28379642&redirect_uri=${red}&response_type=code&scope=user-read-private%20user-read-email&state=${signerAddress}`;
+    window.location.href = authUrl;
+  }
+
+  async function twitchAuth(){
+    let reduri = NEXT_PUBLIC_SITE_URL + '/api/spotifycb';
+    let red = encodeURIComponent(reduri);
+    let authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=ghb2na9qbwpfvn2557fetvll6lxf1p&redirect_uri=${red}&response_type=code&scope=user:edit%20user:read:email&state=${signerAddress}`;
     window.location.href = authUrl;
   }
 
@@ -190,6 +197,20 @@ export default function Home() {
                       <Button onClick={spotifyAuth} fontWeight="100" backgroundColor="#1db954" color="white" borderRadius="100" _hover={{backgroundColor:"#168d40"}}>
                         <SpotifyIcon boxSize={5} mr={4}/>
                         Log in with Spotify
+                      </Button>
+                    )
+                  }
+                  <br/>
+                  {
+                    Boolean(bridgeData?.twitch) !== false ? (
+                      <Button isLoading={loadingType === 'twitch'} onClick={()=>{disconnectAuth('twitch')}} fontWeight="100" backgroundColor="#9147ff" color="white" borderRadius="100"  _hover={{backgroundColor:"#5b26ab"}}>
+                        <DisconnectIcon boxSize={4} mr={2} />
+                        Twitch {bridgeData?.twitch}
+                      </Button>
+                    ) : (
+                      <Button onClick={twitchAuth} fontWeight="100" backgroundColor="#9147ff" color="white" borderRadius="100" _hover={{backgroundColor:"#5b26ab"}}>
+                        <TwitchIcon boxSize={5} mr={4}/>
+                        Log in with Twitch
                       </Button>
                     )
                   }
