@@ -55,35 +55,35 @@ export default function Home() {
 
   async function slackAuth(){
     let authUrl = `https://slack.com/openid/connect/authorize?response_type=code&scope=openid%20profile%20email&client_id=2365887896900.2359697771138&state=${signerAddress}&nonce=${signerAddress}&redirect_uri=${encodeURIComponent(NEXT_PUBLIC_SITE_URL + '/api/slackcb')}`;
-    window.location.href = authUrl;
+    window.open(authUrl, '_blank').focus();
   }
 
   async function discordAuth(){
     let reduri = NEXT_PUBLIC_SITE_URL + '/api/discordcb';
     let red = encodeURIComponent(reduri);
     let authUrl = `https://discord.com/api/oauth2/authorize?client_id=874563415228702751&redirect_uri=${red}&response_type=code&scope=identify%20email&state=${signerAddress}`;
-    window.location.href = authUrl;
+    window.open(authUrl, '_blank').focus();
   }
 
   async function zoomAuth(){
     let reduri = NEXT_PUBLIC_SITE_URL + '/api/zoomcb';
     let red = encodeURIComponent(reduri);
     let authUrl = `https://zoom.us/oauth/authorize?client_id=${NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${red}&response_type=code&scope=user%3Aread&state=${signerAddress}`;
-    window.location.href = authUrl;
+    window.open(authUrl, '_blank').focus();
   }
 
   async function spotifyAuth(){
     let reduri = NEXT_PUBLIC_SITE_URL + '/api/spotifycb';
     let red = encodeURIComponent(reduri);
     let authUrl = `https://accounts.spotify.com/authorize?client_id=bd08b95348ab43a8ae061c0a28379642&redirect_uri=${red}&response_type=code&scope=user-read-private%20user-read-email&state=${signerAddress}`;
-    window.location.href = authUrl;
+    window.open(authUrl, '_blank').focus();
   }
 
   async function twitchAuth(){
     let reduri = NEXT_PUBLIC_SITE_URL + '/api/twitchcb';
     let red = encodeURIComponent(reduri);
     let authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=ghb2na9qbwpfvn2557fetvll6lxf1p&redirect_uri=${red}&response_type=code&scope=user:read:email&state=${signerAddress}`;
-    window.location.href = authUrl;
+    window.open(authUrl, '_blank').focus();
   }
 
   useEffect(() => {
@@ -100,9 +100,9 @@ export default function Home() {
   return (
     <>
         <Head>
-            <title>Convo Bridge</title>
-            <meta name="description" content="Janus" />
-            <link rel="icon" href="/favicon.ico" />
+          <title>Convo Bridge</title>
+          <meta name="description" content="Janus" />
+          <link rel="icon" href="/favicon.ico" />
         </Head>
         <NavBar />
         <Flex direction="column" p="200px" alignItems="center" h="100vh">

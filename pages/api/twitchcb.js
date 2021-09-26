@@ -1,5 +1,6 @@
 import { updateAuthData } from '@/lib/bridge';
-import fetch, { Headers } from 'node-fetch';
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const Headers = (...args) => import('node-fetch').then(({Headers}) => new Headers(...args));
 
 export default async (req, res) => {
 
@@ -8,7 +9,7 @@ export default async (req, res) => {
 
     let { code }  = req.query;
 
-    let myHeaders = new Headers();
+    let myHeaders = Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
     let urlencoded = new URLSearchParams();
@@ -32,7 +33,7 @@ export default async (req, res) => {
 
     // console.log(result);
 
-    let h2 = new Headers();
+    let h2 = Headers();
     h2.append("Accept", `application/vnd.twitchtv.v5+json`);
     h2.append("Authorization", `Bearer ${result?.access_token}`);
     h2.append("Client-Id", `ghb2na9qbwpfvn2557fetvll6lxf1p`);

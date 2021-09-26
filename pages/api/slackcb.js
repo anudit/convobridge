@@ -1,4 +1,5 @@
-import fetch, { Headers } from 'node-fetch';
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const Headers = (...args) => import('node-fetch').then(({Headers}) => new Headers(...args));
 import jwt from 'jsonwebtoken';
 import { updateAuthData } from '@/lib/bridge';
 
@@ -7,7 +8,7 @@ export default async (req, res) => {
   let {SLACK_CLIENT_SECRET, NEXT_PUBLIC_SITE_URL} = process.env;
   let { code }  = req.query;
 
-  var myHeaders = new Headers();
+  var myHeaders = Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
   var urlencoded = new URLSearchParams();

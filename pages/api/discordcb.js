@@ -1,5 +1,6 @@
 import { updateAuthData } from '@/lib/bridge';
-import fetch, { Headers } from 'node-fetch';
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const Headers = (...args) => import('node-fetch').then(({Headers}) => new Headers(...args));
 
 export default async (req, res) => {
 
@@ -7,7 +8,7 @@ export default async (req, res) => {
 
     let { code }  = req.query;
 
-    let myHeaders = new Headers();
+    let myHeaders = Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
     let urlencoded = new URLSearchParams();
@@ -28,7 +29,7 @@ export default async (req, res) => {
     let response = await fetch("https://discord.com/api/v8/oauth2/token", requestOptions)
     let result = await response.json();
 
-    let h2 = new Headers();
+    let h2 = Headers();
     h2.append("Authorization", `Bearer ${result?.access_token}`);
 
     let ro = {
