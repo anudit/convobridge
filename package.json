@@ -8,7 +8,7 @@
     "start": "next start",
     "export": "next export",
     "lint": "next lint",
-    "tunnel": "lt --port 8000 --subdomain convo2"
+    "tunnel": "ngrok http 8000"
   },
   "dependencies": {
     "@callowcreation/basic-twitch-oauth": "^1.0.12",

@@ -32,10 +32,11 @@ export default async (req, res) => {
 
     // console.log(result);
 
-    let h2 = Headers();
-    h2.append("Accept", `application/vnd.twitchtv.v5+json`);
-    h2.append("Authorization", `Bearer ${result?.access_token}`);
-    h2.append("Client-Id", `ghb2na9qbwpfvn2557fetvll6lxf1p`);
+    let h2 = await Headers({
+        "Authorization":`Bearer ${result?.access_token}`,
+        "Accept": `application/vnd.twitchtv.v5+json`,
+        "Client-Id": `ghb2na9qbwpfvn2557fetvll6lxf1p`
+    });
 
     let ro = {
         method: 'GET',

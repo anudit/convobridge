@@ -29,8 +29,7 @@ export default async (req, res) => {
     let result = await response.json();
     // res.status(200).json(result);
 
-    let h2 = Headers();
-    h2.append("Authorization", `Bearer ${result?.access_token}`);
+    let h2 = await Headers({"Authorization":`Bearer ${result?.access_token}`});
 
     let ro = {
         method: 'GET',

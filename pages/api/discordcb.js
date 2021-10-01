@@ -28,8 +28,9 @@ export default async (req, res) => {
     let response = await fetch("https://discord.com/api/v8/oauth2/token", requestOptions)
     let result = await response.json();
 
-    let h2 = Headers();
-    h2.append("Authorization", `Bearer ${result?.access_token}`);
+    let h2 = await Headers({
+        "Authorization":`Bearer ${result?.access_token}`
+    });
 
     let ro = {
         method: 'GET',

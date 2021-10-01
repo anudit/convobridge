@@ -28,9 +28,7 @@ export default async (req, res) => {
     let response = await fetch("https://accounts.spotify.com/api/token", requestOptions)
     let result = await response.json();
     // return res.status(200).json(result);
-
-    let h2 = Headers();
-    h2.append("Authorization", `Bearer ${result?.access_token}`);
+    let h2 = await Headers({"Authorization":`Bearer ${result?.access_token}`});
 
     let ro = {
         method: 'GET',
