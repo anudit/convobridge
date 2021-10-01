@@ -8,8 +8,7 @@ export default async (req, res) => {
   let {SLACK_CLIENT_SECRET, NEXT_PUBLIC_SITE_URL} = process.env;
   let { code }  = req.query;
 
-  var myHeaders = Headers();
-  myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  var myHeaders = Headers({ "Content-Type": "application/x-www-form-urlencoded" })
 
   var urlencoded = new URLSearchParams();
   urlencoded.append("client_id", "2365887896900.2359697771138");

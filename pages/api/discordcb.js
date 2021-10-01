@@ -8,8 +8,7 @@ export default async (req, res) => {
 
     let { code }  = req.query;
 
-    let myHeaders = Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    let myHeaders = Headers({ "Content-Type": "application/x-www-form-urlencoded" })
 
     let urlencoded = new URLSearchParams();
     urlencoded.append("client_id", "874563415228702751");
