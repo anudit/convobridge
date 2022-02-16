@@ -1,18 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Head from 'next/head';
-import { Flex, Button, Heading, Text } from "@chakra-ui/react";
+import { Flex, Button, Heading, Text, useDisclosure, Input, Progress, IconButton } from "@chakra-ui/react";
 import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { Web3Context } from "@/contexts/Web3Context";
 import { truncateAddress } from "@/utils/stringUtils";
-import { DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, TwitchIcon, ZoomIcon } from "@/public/icons";
+import { AadharIcon, DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, TwitchIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
-
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
+import { RepeatIcon } from "@chakra-ui/icons";
 
 export default function Home() {
 
-  const web3Context = useContext(Web3Context);
-  const { connectWallet, signerAddress, disconnectWallet } = web3Context;
+  const { connectWallet, signerAddress, disconnectWallet } = useContext(Web3Context);
   const [ bridgeData, setBridgeData ] = useState(undefined);
   const NEXT_PUBLIC_ZOOM_CLIENT_ID = process.env.NEXT_PUBLIC_ZOOM_CLIENT_ID;
   const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
@@ -86,6 +94,119 @@ export default function Home() {
     window.open(authUrl, '_blank').focus();
   }
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [ aadharData, setAadharData ] = useState(undefined);
+  const [ progressState, setProgressState ] = useState(null);
+  const [ loadingState, setLoadingState ] = useState(false);
+  const aadharRef = useRef();
+  const mobileRef = useRef();
+  const captchaRef = useRef();
+  const otpRef = useRef();
+
+  const aadharStateData = {
+    null : {
+      loading: 0,
+      nextbtn: "Loading"
+    },
+    captcha : {
+      loading: 33,
+      nextbtn: "Verify Captcha"
+    },
+    genOtp : {
+      loading: 66,
+      nextbtn: "Verify OTP"
+    },
+    allDone : {
+      loading: 100,
+      nextbtn: "Close"
+    }
+  }
+
+  async function updateCaptcha(){
+    fetch('/api/aadhar/getCaptcha').then(data=>{
+      return data.json()
+    }).then(json=>{
+      console.log(json)
+      setAadharData(json)
+      setLoadingState(false);
+      setProgressState('captcha')
+    });
+  }
+
+  async function genOtp(){
+    setLoadingState(true);
+    let captchaAnswer = captchaRef.current.value;
+    let aadharNumber = aadharRef.current.value;
+    let mobileNumber = mobileRef.current.value;
+
+    const bodyData = {
+      address: signerAddress,
+      captchaTxnId: aadharData?.captchaTxnId,
+      uidNumber: aadharNumber,
+      captcha: captchaAnswer,
+      verificationCode: "",
+      mobileNumber: mobileNumber
+    };
+    console.log('bodyData', JSON.stringify(bodyData));
+
+
+    let respData = await fetch('/api/aadhar/verify', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bodyData),
+    });
+    respData = await respData.json();
+
+    if ('errorCode' in respData){
+      alert(respData?.errorDetails?.messageEnglish)
+      if (respData?.errorCode === "VEM_VAL_004"){
+        updateCaptcha();
+      }
+    }
+    else if('status' in respData  && respData['status'] === 'Success'){
+      if(respData['responseData']['code'] === '2006'){
+        setProgressState('allDone');
+      }
+      else {
+        setProgressState('genOtp')
+      }
+    }
+
+    console.log('genOtp', respData);
+    setLoadingState(false);
+  }
+
+  async function verifyOtp(){
+    setLoadingState(true);
+
+    let captchaAnswer = captchaRef.current.value;
+    let aadharNumber = aadharRef.current.value;
+    let mobileNumber = mobileRef.current.value;
+    let otpCode = otpRef.current.value;
+
+    let respData = await fetch('/api/aadhar/verify', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        address: signerAddress,
+        captchaTxnId: aadharData?.captchaTxnId,
+        uidNumber: aadharNumber,
+        captcha: captchaAnswer,
+        verificationCode: otpCode,
+        mobileNumber: mobileNumber
+      }),
+    });
+    respData = await respData.json();
+    console.log(respData);
+
+    setLoadingState(false);
+  }
+
+
   useEffect(() => {
     async function fetchData(){
       if (isAddress(signerAddress) === true) {
@@ -130,10 +251,93 @@ export default function Home() {
               }
             </Flex>
             <br/>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Aadhar Verification</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Progress hasStripe
+                    value={aadharStateData[progressState].loading}
+                    size='xs'
+                  />
+                  {
+                    progressState === null && (
+                      <></>
+                    )
+                  }
+                  {
+                    progressState === 'captcha' && (
+                      <>
+                        <Text>Step 1/2</Text>
+                        <br/>
+                        <Input ref={aadharRef} placeholder='Enter your Aadhar Number' size='md' pattern="\d*" maxLength={12} mb={1}/>
+                        <Input ref={mobileRef} placeholder='Enter your Mobile Number' size='md' pattern="\d*" maxLength={10} mb={1}/>
+                        <Flex direction="row">
+                          <Input ref={captchaRef} placeholder='Enter Captcha' size='md' mr={2} mb={1}/>
+                          <img src={`data:image/jpeg;base64,${aadharData?.captchaBase64String}`} style={{height: "40px"}}/>
+                          <IconButton icon={<RepeatIcon />} onClick={updateCaptcha} ml={2}/>
+                        </Flex>
+                      </>
+                    )
+                  }
+                  {
+                    progressState === 'genOtp' && (
+                      <>
+                        <Text>Step 2/2</Text>
+                        <br/>
+                        <Text>An OTP has been sent to your registered mobile number.</Text>
+                        <Input ref={otpRef} placeholder='Enter your OTP' size='md' mb={1}/>
+                      </>
+                    )
+                  }
+                  {
+                    progressState === 'allDone' && (
+                      <>
+                        <Text>All Done</Text>
+                      </>
+                    )
+                  }
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme='blue' size="sm" isLoading={loadingState} onClick={()=>{
+                    if(progressState === 'captcha'){
+                      genOtp();
+                    }
+                    else if (progressState === 'genOtp'){
+                      verifyOtp();
+                    }
+                    else if (progressState === 'allDone'){
+                      onClose();
+                    }
+                  }}>
+                    {aadharStateData[progressState].nextbtn}
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
             <br/>
             {
               signerAddress !== "" && Boolean(bridgeData) === true ? (
                 <Flex direction="column">
+                  {
+                    Boolean(bridgeData?.aadharData) !== false ? (
+                      <Button isLoading={loadingType === 'aadhar'} onClick={()=>{disconnectAuth('aadhar')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
+                        <DisconnectIcon boxSize={4} mr={2} />
+                        Aadhar {bridgeData?.aadharData?.uidNumber}
+                      </Button>
+                    ) : (
+                      <Button onClick={()=>{
+                        updateCaptcha();
+                        onOpen();
+                      }} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
+                        <AadharIcon boxSize={6} mr={2}/>
+                        Log in with Aadhar
+                      </Button>
+                    )
+                  }
+                  <br/>
                   {
                     Boolean(bridgeData?.telegram) !== false ? (
                       <Button isLoading={loadingType === 'telegram'} onClick={()=>{disconnectAuth('telegram')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
