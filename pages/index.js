@@ -17,6 +17,7 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react'
 import { RepeatIcon } from "@chakra-ui/icons";
+import BiometricButton from "@/components/BiometricButton";
 
 export default function Home() {
 
@@ -207,15 +208,17 @@ export default function Home() {
   }
 
 
-  useEffect(() => {
-    async function fetchData(){
-      if (isAddress(signerAddress) === true) {
-        let data = await fetch('/api/bridge?address='+signerAddress).then(data=>{return data.json()});
-        setBridgeData(data);
-        console.log(data);
-      }
+  async function refreshBridgeData(){
+    if (isAddress(signerAddress) === true) {
+      let data = await fetch('/api/bridge?address='+signerAddress).then(data=>{return data.json()});
+      setBridgeData(data);
+      console.log(data);
     }
-    fetchData();
+  }
+
+  useEffect(() => {
+    refreshBridgeData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signerAddress]);
 
   return (
@@ -321,6 +324,8 @@ export default function Home() {
             {
               signerAddress !== "" && Boolean(bridgeData) === true ? (
                 <Flex direction="column">
+                  <BiometricButton bridgeData={bridgeData} refreshBridgeData={refreshBridgeData}/>
+                  <br/>
                   {
                     Boolean(bridgeData?.aadharData) !== false ? (
                       <Button isLoading={loadingType === 'aadhar'} onClick={()=>{disconnectAuth('aadhar')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
