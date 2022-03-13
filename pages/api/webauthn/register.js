@@ -1,10 +1,8 @@
-import { generateRegistrationOptions, verifyRegistrationResponse } from '@simplewebauthn/server';
+import { verifyRegistrationResponse } from '@simplewebauthn/server';
 import base64url from "base64url";
 import { MongoClient } from 'mongodb';
 
-
-import {RP_NAME, RP_ID, ORIGIN} from "@/utils/constants";
-import { getBridgeData } from '@/lib/bridge';
+import { RP_ID, ORIGIN} from "@/utils/constants";
 import { getAddress } from 'ethers/lib/utils';
 
 let expectedOrigin = ORIGIN;
