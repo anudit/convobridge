@@ -1,5 +1,5 @@
+import { updateAuthData } from '@/lib/bridge';
 import { getAddress, isAddress } from 'ethers/lib/utils';
-const mongoClientPromise = require('@/lib/mongo-db');
 
 export default async (req, res) => {
     const bodyData = req.body;
@@ -32,18 +32,7 @@ export default async (req, res) => {
                 requestDate:  respData['responseData']['requestDate']
             };
 
-            const client = await mongoClientPromise;
-            let coll = client.db('convo').collection('bridge');
-
-            let newDoc = {
-                _id: getAddress(address),
-                aadharData : storageData
-            }
-            await coll.updateOne(
-                { _id : getAddress(address)},
-                { $set: newDoc },
-                { upsert: true }
-            )
+            await updateAuthData('aadhar', getAddress(address), storageData);
 
         }
 

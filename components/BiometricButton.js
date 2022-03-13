@@ -65,26 +65,18 @@ const BiometricButton = ({bridgeData, refreshBridgeData}) => {
                 <ModalHeader>Biometric Verification</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {
-                        Boolean(bridgeData?.biometric?.device) === true ? (
-                            <>
-                                <Button enabled={false}>Verified</Button>
-                                <br/>
-                                <Button onClick={testBiometric}>
-                                    Test Biometric
-                                </Button>
-                            </>
-
-                        ) : (
-                            <Button>Verify Biometric</Button>
-                        )
-                    }
+                    <Button onClick={testBiometric}>
+                        Test Biometric
+                    </Button>
+                    <Button onClick={testBiometric}>
+                        Disconnect Biometric
+                    </Button>
                 </ModalBody>
             </ModalContent>
         </Modal>
         <Button isLoading={isLoading} onClick={getChallengeData} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
             <BiometricIcon boxSize={4} mr={2}/>
-            Log in with Biometric
+            {Boolean(bridgeData?.biometric?.device) === true ? "Biometric Verified" : "Log in with Biometric"}
         </Button>
     </>
   );

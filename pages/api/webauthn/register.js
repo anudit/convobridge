@@ -1,9 +1,9 @@
 import { verifyRegistrationResponse } from '@simplewebauthn/server';
 import base64url from "base64url";
-import { MongoClient } from 'mongodb';
 
 import { RP_ID, ORIGIN} from "@/utils/constants";
 import { getAddress } from 'ethers/lib/utils';
+import { getBridgeData, updateAuthData } from '@/lib/bridge';
 
 let expectedOrigin = ORIGIN;
 
@@ -16,12 +16,7 @@ export default async function handler(req, res) {
   }
   ethAddress = getAddress(ethAddress);
 
-  const client = await MongoClient.connect(process.env.MONGODB_URI);
-  let db = client.db('convo');
-  let coll = db.collection('bridge');
-  let bridgeData = await coll.findOne({"_id" : ethAddress});
-
-  // const bridgeData = await getBridgeData(ethAddress);
+  let bridgeData = await getBridgeData(ethAddress);
 
   if (Boolean(bridgeData?.biometric?.challenge) === false) {
     return res.status(400).json({error: "There is no pre-generated challenge"});
@@ -55,19 +50,11 @@ export default async function handler(req, res) {
     };
 
     console.log(newDeviceObj);
-    let newDoc = {
-      _id: getAddress(ethAddress),
-      biometric : {
-        device : newDeviceObj,
-      }
-    }
-    await coll.updateOne(
-      { _id : getAddress(ethAddress)},
-      { $set: newDoc },
-      { upsert: true }
-    )
+    await updateAuthData('biometric', ethAddress, {
+      device : newDeviceObj,
+    });
 
   }
 
-  return res.send({ verified });
+  return res.json({ verified });
 }

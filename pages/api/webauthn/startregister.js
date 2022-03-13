@@ -1,8 +1,7 @@
 import { generateRegistrationOptions } from '@simplewebauthn/server';
 import { getAddress, isAddress } from 'ethers/lib/utils';
-import { MongoClient } from 'mongodb';
-
 import { RP_NAME, RP_ID } from "@/utils/constants";
+import { updateAuthData } from '@/lib/bridge';
 
 export default async function handler( req, res ) {
   let {ethAddress} = req.query;
@@ -51,21 +50,9 @@ export default async function handler( req, res ) {
 
   const options = generateRegistrationOptions(opts);
 
-  const client = await MongoClient.connect(process.env.MONGODB_URI);
-  let db = client.db('convo');
-  let coll = db.collection('bridge');
+  await updateAuthData('biometric', ethAddress, {
+    challenge: options.challenge,
+  });
 
-  let newDoc = {
-    _id: getAddress(ethAddress),
-    biometric : {
-      challenge: options.challenge,
-    }
-  }
-  await coll.updateOne(
-    { _id : getAddress(ethAddress)},
-    { $set: newDoc },
-    { upsert: true }
-  )
-
-  return res.send(options);
+  return res.json(options);
 }
