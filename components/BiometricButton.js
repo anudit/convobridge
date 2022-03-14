@@ -128,7 +128,7 @@ const BiometricButton = ({bridgeData, refreshBridgeData}) => {
                 <ModalHeader>Biometric Verification</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Button onClick={testBiometric}>
+                    <Button onClick={testBiometric} isLoading={isTestLoading}>
                         Test Biometric
                     </Button>
                     <Button onClick={disconnectAuth}>

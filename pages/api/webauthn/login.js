@@ -2,7 +2,7 @@ import base64url from 'base64url';
 import { verifyAuthenticationResponse } from '@simplewebauthn/server';
 import {ORIGIN, RP_ID} from "../../../utils/constants";
 import { getAddress } from 'ethers/lib/utils';
-import { getBridgeData, updateAuthData } from '@/lib/bridge';
+import { getBridgeData } from '@/lib/bridge';
 
 let expectedOrigin = ORIGIN;
 
