@@ -2,12 +2,13 @@ import React, { useContext, useState } from "react";
 import {  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Button } from "@chakra-ui/react";
 import { BiometricIcon } from "@/public/icons";
 import { Web3Context } from "@/contexts/Web3Context";
-import { startRegistration } from "@simplewebauthn/browser";
+import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
 const BiometricButton = ({bridgeData, refreshBridgeData}) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { signerAddress } = useContext(Web3Context);
   const [isLoading, setLoading] = useState(false);
+  const [isTestLoading, setTestLoading] = useState(false);
 
   async function getChallengeData(){
 
@@ -52,7 +53,69 @@ const BiometricButton = ({bridgeData, refreshBridgeData}) => {
 
   }
   async function testBiometric(){
+    setTestLoading(true);
+    fetch(`api/webauthn/startlogin?ethAddress=${signerAddress}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        startAuthentication(data)
+          .then((attRes) => {
+            fetch('api/webauthn/login', {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ ...attRes, ethAddress: signerAddress }),
+            })
+              .then((res) => res.json())
+              .then((result) => {
+                console.log(result);
+                setTestLoading(false);
+                alert("Your account has been successfully authenticated");
+              })
+              .catch((e) => {
+                console.log(e);
+                setTestLoading(false);
+                alert("Login failed");
+              });
+          })
+          .catch((e) => {
+            console.log(e);
+            setTestLoading(false);
+            alert("Authentication with your security key failed");
+          });
+      })
+      .catch((e) => {
+        console.log(e);
+        setTestLoading(false);
+        alert("Failed preparing for authentication");
+        // alert(e.message)
+      });
+
   }
+
+  async function sendData(url = '', data = {}, method="GET") {
+    const response = await fetch(url, {
+      method,
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+    return response.json();
+  }
+
+  const disconnectAuth = async () => {
+    setLoading(true);
+    await sendData('/api/bridge?type=biometric&ethAddress='+signerAddress, {}, "DELETE");
+    refreshBridgeData();
+    setLoading(false);
+  };
 
   return (
     <>
@@ -68,7 +131,7 @@ const BiometricButton = ({bridgeData, refreshBridgeData}) => {
                     <Button onClick={testBiometric}>
                         Test Biometric
                     </Button>
-                    <Button onClick={testBiometric}>
+                    <Button onClick={disconnectAuth}>
                         Disconnect Biometric
                     </Button>
                 </ModalBody>
