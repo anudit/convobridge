@@ -3,7 +3,8 @@ import Head from 'next/head';
 import { Flex, Button, Heading, Text, useDisclosure, Input, Progress, IconButton } from "@chakra-ui/react";
 import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
-import { Web3Context } from "@/contexts/Web3Context";
+import { RainbowContext } from "@/contexts/RainbowContext";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { truncateAddress } from "@/utils/stringUtils";
 import { AadharIcon, DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, TwitchIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
@@ -21,13 +22,13 @@ import BiometricButton from "@/components/BiometricButton";
 
 export default function Home() {
 
-  const { connectWallet, signerAddress, disconnectWallet } = useContext(Web3Context);
+  const { signerAddress } = useContext(RainbowContext);
+
   const [ bridgeData, setBridgeData ] = useState(undefined);
   const NEXT_PUBLIC_ZOOM_CLIENT_ID = process.env.NEXT_PUBLIC_ZOOM_CLIENT_ID;
   const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
   const [ loadingType, setLoadingType ] = useState('');
-
 
   async function sendData(url = '', data = {}, method="GET") {
     const response = await fetch(url, {
@@ -234,24 +235,7 @@ export default function Home() {
             <Heading>🌉 Convo Bridge</Heading>
             <Text fontSize="md">Bridge your Web2 Accounts to Web3</Text>
             <Flex direction="row" justifyContent="center" alignItems="center" mt={4}>
-              {
-                signerAddress == "" ? (
-                  <Button onClick={()=>{connectWallet()}}>Connect Wallet</Button>
-                ) : (
-                  <>
-                    <Text fontSize="xl">{truncateAddress(signerAddress)}</Text>
-                    <Button onClick={()=>{
-                        setBridgeData(undefined);
-                        disconnectWallet();
-                      }}
-                      variant="ghost"
-                      ml={2}
-                    >
-                      <DisconnectIcon/>
-                    </Button>
-                  </>
-                )
-              }
+              <ConnectButton />
             </Flex>
             <br/>
             <Modal isOpen={isOpen} onClose={onClose}>

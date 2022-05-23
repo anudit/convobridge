@@ -4,7 +4,8 @@ import { Global, css } from '@emotion/react';
 import Head from 'next/head'
 
 import customTheme from '@/styles/theme';
-import { Web3ContextProvider } from '@/contexts/Web3Context';
+import { RainbowContextProvider } from '@/contexts/RainbowContext';
+
 
 const GlobalStyle = ({ children }) => {
   return (
@@ -114,7 +115,7 @@ const GlobalStyle = ({ children }) => {
 
 const App = ({ Component, pageProps }) => {
   return (
-    <Web3ContextProvider>
+    <RainbowContextProvider>
       <ChakraProvider theme={customTheme} resetCSS>
           <GlobalStyle/>
           <Head>
@@ -122,7 +123,7 @@ const App = ({ Component, pageProps }) => {
           </Head>
           <Component {...pageProps} />
       </ChakraProvider>
-    </Web3ContextProvider>
+    </RainbowContextProvider>
   )
 }
 

@@ -27,7 +27,7 @@ const NavBar = () => {
         <ConvoIcon boxSize={7}/>
         <Link href="/" style={{textDecoration: 'inherit'}} fontWeight={400}>
           <Text ml={3} as="h1" fontSize="larger" cursor="pointer">
-            The Convo Space
+            Convo Space
           </Text>
         </Link>
       </Flex>

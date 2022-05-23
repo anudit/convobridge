@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import {  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Button } from "@chakra-ui/react";
 import { BiometricIcon } from "@/public/icons";
-import { Web3Context } from "@/contexts/Web3Context";
+import { RainbowContext } from "@/contexts/RainbowContext";
 import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
 const BiometricButton = ({bridgeData, refreshBridgeData}) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { signerAddress } = useContext(Web3Context);
+  const { signerAddress } = useContext(RainbowContext);
   const [isLoading, setLoading] = useState(false);
   const [isTestLoading, setTestLoading] = useState(false);
 
