@@ -1,11 +1,14 @@
 import React, { createContext, useEffect, useState } from 'react'
 import '@rainbow-me/rainbowkit/styles.css'
-import { chain, createClient, WagmiConfig, useAccount, useProvider } from 'wagmi'
-import { midnightTheme, apiProvider, configureChains, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { chain, createClient, WagmiConfig, useAccount, configureChains, useProvider  } from 'wagmi'
+import { infuraProvider } from 'wagmi/providers/infura'
+import { publicProvider } from 'wagmi/providers/public'
+import { midnightTheme, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+
 
 const { chains, provider } = configureChains(
 	[chain.mainnet],
-	[apiProvider.infura("1e7969225b2f4eefb3ae792aabf1cc17"), apiProvider.fallback()]
+	[infuraProvider({infuraId :"1e7969225b2f4eefb3ae792aabf1cc17"}), publicProvider()]
 )
 
 const { connectors } = getDefaultWallets({ appName: "Convo Bridge", chains })
@@ -16,7 +19,7 @@ export const RainbowContext = createContext(undefined);
 export const RainbowContextProvider = ({children}) => {
 
     return (
-		<WagmiConfig client={wagmiClient}>
+		<WagmiConfig client={wagmiClient} coolMode>
 			<RainbowKitProvider
                 coolMode
                 chains={chains}

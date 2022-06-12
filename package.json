@@ -12,32 +12,32 @@
   },
   "dependencies": {
     "@callowcreation/basic-twitch-oauth": "^1.0.12",
-    "@chakra-ui/icons": "^2.0.0",
-    "@chakra-ui/react": "^2.1.0",
+    "@chakra-ui/icons": "^2.0.2",
+    "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@rainbow-me/rainbowkit": "^0.1.1",
+    "@rainbow-me/rainbowkit": "^0.2.4",
     "@simplewebauthn/browser": "^5.2.1",
     "@simplewebauthn/server": "^5.2.1",
     "@textile/hub": "^6.3.4",
     "@walletconnect/web3-provider": "^1.7.8",
     "critters": "^0.0.16",
-    "ethers": "^5.6.7",
-    "framer-motion": "6.3.3",
+    "ethers": "^5.6.8",
+    "framer-motion": "6.3.11",
     "jsonwebtoken": "^8.5.1",
     "next": "12.1.6",
     "next-compose-plugins": "^2.2.1",
     "next-connect": "^0.12.2",
-    "next-pwa": "^5.5.2",
+    "next-pwa": "^5.5.4",
     "next-transpile-modules": "^9.0.0",
-    "node-fetch": "3.2.4",
+    "node-fetch": "3.2.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-telegram-login": "^1.1.2",
-    "wagmi": "^0.4.1"
+    "wagmi": "^0.4.12"
   },
   "devDependencies": {
-    "eslint": "8.16.0",
+    "eslint": "8.17.0",
     "eslint-config-next": "12.1.6"
   }
 }

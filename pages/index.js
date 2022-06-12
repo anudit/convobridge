@@ -235,7 +235,7 @@ export default function Home() {
             <Heading>🌉 Convo Bridge</Heading>
             <Text fontSize="md">Bridge your Web2 Accounts to Web3</Text>
             <Flex direction="row" justifyContent="center" alignItems="center" mt={4}>
-              <ConnectButton />
+              <ConnectButton showBalance={false} />
             </Flex>
             <br/>
             <Modal isOpen={isOpen} onClose={onClose}>
