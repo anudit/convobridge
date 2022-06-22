@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import {  Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Button } from "@chakra-ui/react";
-import { BiometricIcon } from "@/public/icons";
+import { BiometricIcon, DisconnectIcon } from "@/public/icons";
 import { RainbowContext } from "@/contexts/RainbowContext";
 import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
+import CardShell from "./CardShell";
+import { Tooltip } from "@chakra-ui/react";
 const BiometricButton = ({bridgeData, refreshBridgeData}) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -118,7 +120,7 @@ const BiometricButton = ({bridgeData, refreshBridgeData}) => {
   };
 
   return (
-    <>
+    <CardShell icon={<BiometricIcon boxSize={7}/>} title="Biometric">
         <Modal isOpen={isOpen} onClose={()=>{
             setLoading(false);
             onClose();
@@ -137,11 +139,17 @@ const BiometricButton = ({bridgeData, refreshBridgeData}) => {
                 </ModalBody>
             </ModalContent>
         </Modal>
-        <Button isLoading={isLoading} onClick={getChallengeData} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
-            <BiometricIcon boxSize={4} mr={2}/>
-            {Boolean(bridgeData?.biometric?.device) === true ? "Biometric Verified" : "Log in with Biometric"}
-        </Button>
-    </>
+        <Tooltip label='Disconnect' aria-label='Disconnect' placement='top'>
+          <Button isLoading={isLoading} onClick={getChallengeData} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#d9534f"}}>
+              {Boolean(bridgeData?.biometric?.device) === true ? (
+                <>
+                  <DisconnectIcon boxSize={4} mr={2} />
+                  Verified
+                </>
+              ) : "Connect"}
+          </Button>
+        </Tooltip>
+    </CardShell>
   );
 };
 

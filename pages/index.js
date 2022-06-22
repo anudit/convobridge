@@ -4,9 +4,7 @@ import { Flex, Button, Heading, Text, useDisclosure, Input, Progress, IconButton
 import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { RainbowContext } from "@/contexts/RainbowContext";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { truncateAddress } from "@/utils/stringUtils";
-import { AadharIcon, DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, TwitchIcon, ZoomIcon } from "@/public/icons";
+import { AadharIcon, DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, TelegramIcon, TwitchIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
 import {
   Modal,
@@ -19,6 +17,11 @@ import {
 } from '@chakra-ui/react'
 import { RepeatIcon } from "@chakra-ui/icons";
 import BiometricButton from "@/components/BiometricButton";
+import CardShell from "@/components/CardShell";
+import { Wrap } from "@chakra-ui/react";
+import CardShell2 from "@/components/CardShell2";
+import { Tooltip } from "@chakra-ui/react";
+import Image from "next/image";
 
 export default function Home() {
 
@@ -225,19 +228,17 @@ export default function Home() {
   return (
     <>
         <Head>
-          <title>Convo Bridge</title>
-          <meta name="description" content="Janus" />
+          <title>Convo | Bridge</title>
+          <meta name="description" content="Bridge" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <NavBar />
-        <Flex direction="column" p="200px" alignItems="center" h="100vh">
-          <Flex direction="column" justifyContent="center" alignItems="center" textAlign="center" w={{base:"100vw", md:"50vw"}}>
-            <Heading>🌉 Convo Bridge</Heading>
+        <Flex direction="column" p={2} alignItems="center">
+          <Flex py={8} mt={{base: 0, md: 16}} flexDirection="column" align="center" mb={{base: 2, md: 16}}>
+            <Heading>Bridge</Heading>
             <Text fontSize="md">Bridge your Web2 Accounts to Web3</Text>
-            <Flex direction="row" justifyContent="center" alignItems="center" mt={4}>
-              <ConnectButton showBalance={false} />
-            </Flex>
-            <br/>
+          </Flex>
+          <Flex direction="column" justifyContent="center" alignItems="center" textAlign="center" w={{base:"100vw", md:"60vw"}}>
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
@@ -262,7 +263,7 @@ export default function Home() {
                         <Input ref={mobileRef} placeholder='Enter your Mobile Number' size='md' pattern="\d*" maxLength={10} mb={1}/>
                         <Flex direction="row">
                           <Input ref={captchaRef} placeholder='Enter Captcha' size='md' mr={2} mb={1}/>
-                          <img src={`data:image/jpeg;base64,${aadharData?.captchaBase64String}`} style={{height: "40px"}}/>
+                          <Image src={`data:image/jpeg;base64,${aadharData?.captchaBase64String}`} style={{height: "40px"}}/>
                           <IconButton icon={<RepeatIcon />} onClick={updateCaptcha} ml={2}/>
                         </Flex>
                       </>
@@ -304,110 +305,92 @@ export default function Home() {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            <br/>
             {
               signerAddress !== "" && Boolean(bridgeData) === true ? (
-                <Flex direction="column">
+                <Wrap width="100%" justify='center'>
                   <BiometricButton bridgeData={bridgeData} refreshBridgeData={refreshBridgeData}/>
-                  <br/>
-                  {
-                    Boolean(bridgeData?.aadharData) !== false ? (
-                      <Button isLoading={loadingType === 'aadhar'} onClick={()=>{disconnectAuth('aadhar')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
-                        <DisconnectIcon boxSize={4} mr={2} />
-                        Aadhar {bridgeData?.aadharData?.uidNumber}
-                      </Button>
-                    ) : (
-                      <Button onClick={()=>{
-                        updateCaptcha();
-                        onOpen();
-                      }} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
-                        <AadharIcon boxSize={6} mr={2}/>
-                        Log in with Aadhar
-                      </Button>
-                    )
-                  }
-                  <br/>
-                  {
-                    Boolean(bridgeData?.telegram) !== false ? (
-                      <Button isLoading={loadingType === 'telegram'} onClick={()=>{disconnectAuth('telegram')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#025e8c"}}>
-                        <DisconnectIcon boxSize={4} mr={2} />
-                        Telegram {bridgeData?.telegram}
-                      </Button>
-                    ) : (
-                      <TelegramLoginButton dataOnauth={handleTelegramResponse} botName="Convospacebot" />
-                    )
-                  }
-                  <br/>
-                  {
-                    Boolean(bridgeData?.slack) !== false ? (
-                      <Button isLoading={loadingType === 'slack'} onClick={()=>{disconnectAuth('slack')}} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
-                        <DisconnectIcon boxSize={4} mr={2} />
-                        Slack {bridgeData?.slack}
-                      </Button>
-                    ) : (
-                      <Button onClick={slackAuth} fontWeight="100" backgroundColor="white" color="black" borderRadius="100" borderWidth="1px" borderColor="grey"  _hover={{backgroundColor:"#ddd"}}>
-                        <SlackIcon boxSize={10} />
-                        Log in with Slack
-                      </Button>
-                    )
-                  }
-                  <br/>
-                  {
-                    Boolean(bridgeData?.discord) !== false ? (
-                      <Button isLoading={loadingType === 'discord'} onClick={()=>{disconnectAuth('discord')}} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100"  _hover={{backgroundColor:"#3c45a5"}}>
-                        <DisconnectIcon boxSize={4} mr={2} />
-                        Discord {bridgeData?.discord}
-                      </Button>
-                    ) : (
-                      <Button onClick={discordAuth} fontWeight="100" backgroundColor="#5865f2" color="white" borderRadius="100" _hover={{backgroundColor:"#3c45a5"}}>
-                        <DiscordIcon boxSize={5} mr={4}/>
-                        Log in with Discord
-                      </Button>
-                    )
-                  }
-                  <br/>
-                  {
-                    Boolean(bridgeData?.zoom) !== false ? (
-                      <Button isLoading={loadingType === 'zoom'} onClick={()=>{disconnectAuth('zoom')}} fontWeight="100" backgroundColor="#0e71eb" color="white" borderRadius="100"  _hover={{backgroundColor:"#0957b7"}}>
-                        <DisconnectIcon boxSize={4} mr={2} />
-                        Zoom {truncateAddress(bridgeData?.zoom)}
-                      </Button>
-                    ) : (
-                      <Button onClick={zoomAuth} fontWeight="100" backgroundColor="#0e71eb" color="white" borderRadius="100" _hover={{backgroundColor:"#0957b7"}}>
-                        <ZoomIcon boxSize={5} mr={4}/>
-                        Log in with Zoom
-                      </Button>
-                    )
-                  }
-                  <br/>
-                  {
-                    Boolean(bridgeData?.spotify) !== false ? (
-                      <Button isLoading={loadingType === 'spotify'} onClick={()=>{disconnectAuth('spotify')}} fontWeight="100" backgroundColor="#1db954" color="white" borderRadius="100"  _hover={{backgroundColor:"#168d40"}}>
-                        <DisconnectIcon boxSize={4} mr={2} />
-                        Spotify {truncateAddress(bridgeData?.spotify)}
-                      </Button>
-                    ) : (
-                      <Button onClick={spotifyAuth} fontWeight="100" backgroundColor="#1db954" color="white" borderRadius="100" _hover={{backgroundColor:"#168d40"}}>
-                        <SpotifyIcon boxSize={5} mr={4}/>
-                        Log in with Spotify
-                      </Button>
-                    )
-                  }
-                  <br/>
-                  {
-                    Boolean(bridgeData?.twitch) !== false ? (
-                      <Button isLoading={loadingType === 'twitch'} onClick={()=>{disconnectAuth('twitch')}} fontWeight="100" backgroundColor="#9147ff" color="white" borderRadius="100"  _hover={{backgroundColor:"#5b26ab"}}>
-                        <DisconnectIcon boxSize={4} mr={2} />
-                        Twitch {bridgeData?.twitch}
-                      </Button>
-                    ) : (
-                      <Button onClick={twitchAuth} fontWeight="100" backgroundColor="#9147ff" color="white" borderRadius="100" _hover={{backgroundColor:"#5b26ab"}}>
-                        <TwitchIcon boxSize={5} mr={4}/>
-                        Log in with Twitch
-                      </Button>
-                    )
-                  }
-                </Flex>
+                  <CardShell accent="#FF9933" icon={ <AadharIcon boxSize={9} />} title="Aadhaar">
+                    {
+                      Boolean(bridgeData?.aadharData) !== false ? (
+                        <Tooltip label='Disconnect' aria-label='Disconnect' placement='top'>
+                          <Button isLoading={loadingType === 'aadhar'} onClick={()=>{disconnectAuth('aadhar')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#d9534f"}}>
+                            <DisconnectIcon boxSize={4} mr={2} />
+                            {bridgeData?.aadharData?.uidNumber}
+                          </Button>
+                        </Tooltip>
+                      ) : (
+                        <Button onClick={()=>{
+                          updateCaptcha();
+                          onOpen();
+                        }} fontWeight="100" backgroundColor="#FF9933" color="white" borderRadius="100" >
+                          Connect
+                        </Button>
+                      )
+                    }
+                  </CardShell>
+                  <CardShell accent='#0088CC' icon={ <TelegramIcon boxSize={9} />} title="Telegram">
+                    {
+                      Boolean(bridgeData?.telegram) !== false ? (
+                        <Button isLoading={loadingType === 'telegram'} onClick={()=>{disconnectAuth('telegram')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#d9534f"}}>
+                          <DisconnectIcon boxSize={4} mr={2} />
+                          {bridgeData?.telegram}
+                        </Button>
+                      ) : (
+                        <TelegramLoginButton dataOnauth={handleTelegramResponse} botName="Convospacebot" />
+                      )
+                    }
+                  </CardShell>
+                  <CardShell2
+                    icon={ <SlackIcon boxSize={12} />}
+                    title="Slack"
+                    cardKey="slack"
+                    authFn={slackAuth}
+                    accent='#4a154b'
+                    bridgeData={bridgeData}
+                    disconnectAuth={disconnectAuth}
+                    loadingType={loadingType}
+                  />
+                  <CardShell2
+                    icon={ <DiscordIcon boxSize={6} />}
+                    title="Discord"
+                    cardKey="discord"
+                    authFn={discordAuth}
+                    accent='#5865f2'
+                    bridgeData={bridgeData}
+                    disconnectAuth={disconnectAuth}
+                    loadingType={loadingType}
+                  />
+                  <CardShell2
+                    icon={ <ZoomIcon boxSize={10} />}
+                    title="Zoom"
+                    cardKey="zoom"
+                    authFn={zoomAuth}
+                    accent='#0e71eb'
+                    bridgeData={bridgeData}
+                    disconnectAuth={disconnectAuth}
+                    loadingType={loadingType}
+                  />
+                  <CardShell2
+                    icon={ <SpotifyIcon boxSize={7} />}
+                    title="Spotify"
+                    cardKey="spotify"
+                    bridgeData={bridgeData}
+                    authFn={spotifyAuth}
+                    disconnectAuth={disconnectAuth}
+                    loadingType={loadingType}
+                    accent='#1db954'
+                  />
+                  <CardShell2
+                    icon={ <TwitchIcon boxSize={6} />}
+                    title="Twitch"
+                    cardKey="twitch"
+                    authFn={twitchAuth}
+                    accent='#6441a5'
+                    bridgeData={bridgeData}
+                    disconnectAuth={disconnectAuth}
+                    loadingType={loadingType}
+                  />
+                </Wrap>
               ) : (<></>)
             }
           </Flex>

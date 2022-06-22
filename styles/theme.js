@@ -4,7 +4,7 @@ const theme = extendTheme({
     styles: {
         global: (props) => ({
           "html, body": {
-            background: props.colorMode === "dark" ? "#100f13" : "white",
+            background: props.colorMode === "dark" ? "black" : "white",
           },
         }),
       },

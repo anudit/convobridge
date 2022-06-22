@@ -45,67 +45,6 @@ const GlobalStyle = ({ children }) => {
           body {
             font-family: "GT Walsheim", "Segoe UI" !important;
           }
-          @-webkit-keyframes hue {
-            from {
-              -webkit-filter: hue-rotate(0deg);
-            }
-            to {
-              -webkit-filter: hue-rotate(-360deg);
-            }
-          }
-          .tp {
-            background: none !important;
-            background-color: transparent !important;
-          }
-          .oh {
-            overflow: hidden !important;
-          }
-          .tp {
-            background: none !important;
-            background-color: transparent !important;
-          }
-          .grow { transition: all .2s ease-in-out; }
-          .grow:hover { transform: scale(1.01);}
-          .gradientShadow::before {
-            content: "";
-            position: absolute;
-            z-index: -1;
-            -webkit-filter: blur(1px);
-            filter: blur(10px);
-            background: conic-gradient(from 217.29deg at 51.63% 52.16%, #2563EB 0deg , #0EA5E9 19.5deg , #EC4899 102.75deg , #F43F5E 152.25deg , #EF4444 208.88deg , #6366F1 291deg );
-            width: 250px;
-            height: 35px;
-            margin: -15px;
-          }
-          .br-10 {
-            border-radius:10px;
-          }
-          .glow:hover::before {
-            content: "";
-            position: absolute;
-            z-index: 0;
-            -webkit-filter: blur(16px);
-            filter: blur(16px);
-            background: conic-gradient(from 217.29deg at 51.63% 52.16%, #2563EB 0deg , #0EA5E9 19.5deg , #EC4899 102.75deg , #F43F5E 152.25deg , #EF4444 208.88deg , #6366F1 291deg );
-            width: 130px;
-            height: 35px;
-            mix-blend-mode: screen;
-            margin-top: -7px;
-            margin-left: -12px;
-            animation: fadeIn linear 0.1s;
-          }
-          @keyframes fadeIn {
-            0% {opacity:0;}
-            100% {opacity:1;}
-          }
-          .typewrite::after {
-            content: "|";
-            animation: blink 1s infinite;
-          }
-          @keyframes blink {
-            0%, 100% {opacity: 1;}
-            50% {opacity: 0;}
-          }
         `}
       />
       {children}
@@ -115,15 +54,15 @@ const GlobalStyle = ({ children }) => {
 
 const App = ({ Component, pageProps }) => {
   return (
-    <RainbowContextProvider>
       <ChakraProvider theme={customTheme} resetCSS>
+    <RainbowContextProvider>
           <GlobalStyle/>
           <Head>
             <meta name="viewport" content="width=device-width, initial-scale=1" />
           </Head>
           <Component {...pageProps} />
-      </ChakraProvider>
     </RainbowContextProvider>
+      </ChakraProvider>
   )
 }
 

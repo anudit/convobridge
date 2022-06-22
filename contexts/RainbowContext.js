@@ -4,6 +4,8 @@ import { chain, createClient, WagmiConfig, useAccount, configureChains, useProvi
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 import { midnightTheme, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { useColorModeValue } from '@chakra-ui/react'
+import { lightTheme } from '@rainbow-me/rainbowkit'
 
 
 const { chains, provider } = configureChains(
@@ -23,7 +25,15 @@ export const RainbowContextProvider = ({children}) => {
 			<RainbowKitProvider
                 coolMode
                 chains={chains}
-                theme={midnightTheme()}
+                theme={useColorModeValue(lightTheme({
+                    borderRadius: 'large',
+                    overlayBlur: 'small',
+                }), midnightTheme({
+                    connectButtonBackground: '#0000',
+                    accentColorForeground: 'white',
+                    borderRadius: 'large',
+                    overlayBlur: 'small',
+                }))}
             >
                 <RainbowKit>
                     {children}
