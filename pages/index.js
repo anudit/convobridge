@@ -4,7 +4,7 @@ import { Flex, Button, Heading, Text, useDisclosure, Input, Progress, IconButton
 import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { RainbowContext } from "@/contexts/RainbowContext";
-import { AadharIcon, DisconnectIcon, DiscordIcon, SlackIcon, SpotifyIcon, TelegramIcon, TwitchIcon, ZoomIcon } from "@/public/icons";
+import { AadharIcon, DiscordIcon, SlackIcon, SpotifyIcon, TelegramIcon, TwitchIcon, UnstoppableIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
 import {
   Modal,
@@ -20,8 +20,15 @@ import BiometricButton from "@/components/BiometricButton";
 import CardShell from "@/components/CardShell";
 import { Wrap } from "@chakra-ui/react";
 import CardShell2 from "@/components/CardShell2";
-import { Tooltip } from "@chakra-ui/react";
 import Image from "next/image";
+import SimpleButton from "@/components/SimpleButton";
+import UAuth from '@uauth/js'
+
+const uauth = new UAuth({
+  clientID: "a399c8e7-cd3c-435c-82dc-79524f74200b",
+  redirectUri: "https://4a4d-122-161-53-70.ngrok.io/api/uauthcb",
+  scope: "openid wallet email:optional humanity_check:optional"
+})
 
 export default function Home() {
 
@@ -238,7 +245,7 @@ export default function Home() {
             <Heading>Bridge</Heading>
             <Text fontSize="md">Bridge your Web2 Accounts to Web3</Text>
           </Flex>
-          <Flex direction="column" justifyContent="center" alignItems="center" textAlign="center" w={{base:"100vw", md:"60vw"}}>
+          <Flex direction="column" justifyContent="center" alignItems="center" textAlign="center" w={{base:"100vw", md:"60vw"}} mb={{base: "100px", md: null}}>
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
@@ -263,7 +270,7 @@ export default function Home() {
                         <Input ref={mobileRef} placeholder='Enter your Mobile Number' size='md' pattern="\d*" maxLength={10} mb={1}/>
                         <Flex direction="row">
                           <Input ref={captchaRef} placeholder='Enter Captcha' size='md' mr={2} mb={1}/>
-                          <Image src={`data:image/jpeg;base64,${aadharData?.captchaBase64String}`} style={{height: "40px"}}/>
+                          <Image width='250px' height="20px" src={`data:image/jpeg;base64,${aadharData?.captchaBase64String}`} style={{height: "40px"}}/>
                           <IconButton icon={<RepeatIcon />} onClick={updateCaptcha} ml={2}/>
                         </Flex>
                       </>
@@ -312,29 +319,47 @@ export default function Home() {
                   <CardShell accent="#FF9933" icon={ <AadharIcon boxSize={9} />} title="Aadhaar">
                     {
                       Boolean(bridgeData?.aadharData) !== false ? (
-                        <Tooltip label='Disconnect' aria-label='Disconnect' placement='top'>
-                          <Button isLoading={loadingType === 'aadhar'} onClick={()=>{disconnectAuth('aadhar')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#d9534f"}}>
-                            <DisconnectIcon boxSize={4} mr={2} />
+                        <SimpleButton
+                          isLoading={loadingType === 'aadhar'}
+                          onClick={()=>{disconnectAuth('aadhar')}}
+                          accent="#0088CC"
+                        >
                             {bridgeData?.aadharData?.uidNumber}
-                          </Button>
-                        </Tooltip>
+                        </SimpleButton>
                       ) : (
-                        <Button onClick={()=>{
+                        <SimpleButton onClick={()=>{
                           updateCaptcha();
                           onOpen();
-                        }} fontWeight="100" backgroundColor="#FF9933" color="white" borderRadius="100" >
+                        }} accent="#FF9933" >
                           Connect
-                        </Button>
+                        </SimpleButton>
                       )
                     }
                   </CardShell>
+                  <CardShell2
+                    disabled={true}
+                    icon={ <UnstoppableIcon boxSize={9} />}
+                    title="Unstoppable"
+                    cardKey="unstoppable"
+                    authFn={()=>{
+                      uauth.loginWithPopup();
+                    }}
+                    accent='#4c47f7'
+                    bridgeData={bridgeData}
+                    disconnectAuth={disconnectAuth}
+                    loadingType={loadingType}
+                  />
                   <CardShell accent='#0088CC' icon={ <TelegramIcon boxSize={9} />} title="Telegram">
                     {
                       Boolean(bridgeData?.telegram) !== false ? (
-                        <Button isLoading={loadingType === 'telegram'} onClick={()=>{disconnectAuth('telegram')}} fontWeight="100" backgroundColor="#0088CC" color="white" borderRadius="100"  _hover={{backgroundColor:"#d9534f"}}>
-                          <DisconnectIcon boxSize={4} mr={2} />
+                        <SimpleButton
+                          isLoading={loadingType === 'telegram'}
+                          onClick={()=>{disconnectAuth('telegram')}}
+                          accent="#0088CC"
+                          type="disconnect"
+                        >
                           {bridgeData?.telegram}
-                        </Button>
+                        </SimpleButton>
                       ) : (
                         <TelegramLoginButton dataOnauth={handleTelegramResponse} botName="Convospacebot" />
                       )
