@@ -40,7 +40,8 @@ export const cleanAdd = (message) => {
 };
 
 export const truncateAddress = (address, len=4) => {
-    return address?.slice(0, 2+len) + "..." + address?.slice(-len);
+    if (typeof address === 'string') return address?.slice(0, 2+len) + "..." + address?.slice(-len);
+    else return address;
 };
 
 

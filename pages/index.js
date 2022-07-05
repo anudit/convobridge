@@ -4,7 +4,7 @@ import { Flex, Button, Heading, Text, useDisclosure, Input, Progress, IconButton
 import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { RainbowContext } from "@/contexts/RainbowContext";
-import { AadharIcon, DiscordIcon, SlackIcon, SpotifyIcon, TelegramIcon, TwitchIcon, UnstoppableIcon, ZoomIcon } from "@/public/icons";
+import { AadharIcon, DiscordIcon, SlackIcon, SpotifyIcon, TelegramIcon, TwitchIcon, UnstoppableIcon, WorldcoinIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
 import {
   Modal,
@@ -25,8 +25,8 @@ import SimpleButton from "@/components/SimpleButton";
 import UAuth from '@uauth/js'
 
 const uauth = new UAuth({
-  clientID: "a399c8e7-cd3c-435c-82dc-79524f74200b",
-  redirectUri: "https://4a4d-122-161-53-70.ngrok.io/api/uauthcb",
+  clientID: "3e99b06b-679a-4706-87b0-15dff22e5122",
+  redirectUri: "https://e6a0-122-161-53-160.ngrok.io/api/uauthcb",
   scope: "openid wallet email:optional humanity_check:optional"
 })
 
@@ -337,18 +337,41 @@ export default function Home() {
                     }
                   </CardShell>
                   <CardShell2
-                    disabled={true}
+                    icon={ <WorldcoinIcon boxSize={6} />}
+                    title="Worldcoin"
+                    cardKey="worldcoin"
+                    authFn={()=>{
+                      window.open(`https://developer.worldcoin.org/hosted/wid_staging_e580f222d9fc791f8d8ef2e6b3e33d25?signal=${signerAddress}`, '_blank')
+                    }}
+                    accent='#183c4a'
+                    bridgeData={bridgeData}
+                    disconnectAuth={disconnectAuth}
+                    loadingType={loadingType}
+                  />
+                  <CardShell2
                     icon={ <UnstoppableIcon boxSize={9} />}
                     title="Unstoppable"
                     cardKey="unstoppable"
-                    authFn={()=>{
-                      uauth.loginWithPopup();
+                    authFn={async ()=>{
+                      // let resp = uauth?.getStore();
+                      // console.log('uauth?.getStore', resp);
+                      let user = await uauth?.user();
+                      console.log('uauth?.user', user);
+                      // if (user){
+                      //   console.log('got user');
+                      // }
+                      // else{
+                      // }
+                      // const authorization = await uauth.loginWithPopup()
+                      // console.log('authorization', authorization);
                     }}
                     accent='#4c47f7'
                     bridgeData={bridgeData}
                     disconnectAuth={disconnectAuth}
                     loadingType={loadingType}
+                    disabled={true}
                   />
+
                   <CardShell accent='#0088CC' icon={ <TelegramIcon boxSize={9} />} title="Telegram">
                     {
                       Boolean(bridgeData?.telegram) !== false ? (
@@ -366,7 +389,7 @@ export default function Home() {
                     }
                   </CardShell>
                   <CardShell2
-                    icon={ <SlackIcon boxSize={12} />}
+                    icon={ <SlackIcon boxSize={5} />}
                     title="Slack"
                     cardKey="slack"
                     authFn={slackAuth}

@@ -23,7 +23,7 @@ const CardShell2 = ({icon, title, cardKey, bridgeData, accent, authFn, disconnec
               isLoading={loadingType === cardKey}
               onClick={disconnectAuth}
             >
-              {truncateAddress(bridgeData[cardKey])}
+              {typeof bridgeData[cardKey] === 'string' ? truncateAddress(bridgeData[cardKey]) : 'Verified'}
             </SimpleButton>
           ) : (
             <SimpleButton onClick={authFn} accent={accent}>

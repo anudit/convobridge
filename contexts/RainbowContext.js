@@ -84,13 +84,13 @@ const RainbowKit = ({children}) => {
     const [signerAddress, setSignerAddress] = useState("");
     const [ensAddress, setEnsAddress] = useState("");
 
-    const { data: accountData } = useAccount();
+    const { address } = useAccount();
     const provider = useProvider();
 
     useEffect(()=>{
-        if(Boolean(accountData?.address) === true){
-            setSignerAddress(accountData.address);
-            addressToEns(accountData.address).then((r)=>{
+        if(Boolean(address) === true){
+            setSignerAddress(address);
+            addressToEns(address).then((r)=>{
                 if (Boolean(r) == true){
                     setEnsAddress(r);
                 }
@@ -100,7 +100,7 @@ const RainbowKit = ({children}) => {
             setSignerAddress("")
             setEnsAddress('')
         }
-    }, [accountData]);
+    }, [address]);
 
     return (
         <RainbowContext.Provider value={{
