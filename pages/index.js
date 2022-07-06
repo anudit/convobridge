@@ -26,7 +26,7 @@ import UAuth from '@uauth/js'
 
 const uauth = new UAuth({
   clientID: "3e99b06b-679a-4706-87b0-15dff22e5122",
-  redirectUri: "https://e6a0-122-161-53-160.ngrok.io/api/uauthcb",
+  redirectUri: "https://78dd-122-161-53-160.ngrok.io/api/uauthcb",
   scope: "openid wallet email:optional humanity_check:optional"
 })
 
@@ -355,14 +355,14 @@ export default function Home() {
                     authFn={async ()=>{
                       // let resp = uauth?.getStore();
                       // console.log('uauth?.getStore', resp);
-                      let user = await uauth?.user();
-                      console.log('uauth?.user', user);
+                      // let user = await uauth?.user();
+                      // console.log('uauth?.user', user);
                       // if (user){
                       //   console.log('got user');
                       // }
                       // else{
                       // }
-                      // const authorization = await uauth.loginWithPopup()
+                      const user = await uauth.loginWithPopup()
                       // console.log('authorization', authorization);
                     }}
                     accent='#4c47f7'
