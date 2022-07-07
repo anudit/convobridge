@@ -32,7 +32,6 @@
     "jwks-rsa": "^2.1.4",
     "next": "12.2.0",
     "next-compose-plugins": "^2.2.1",
-    "next-connect": "^0.12.2",
     "next-pwa": "^5.5.4",
     "next-transpile-modules": "^9.0.0",
     "node-fetch": "3.2.6",

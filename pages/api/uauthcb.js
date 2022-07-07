@@ -38,7 +38,7 @@ const getKey = (header, callback) => {
 }
 
 export default async (req, res) => {
-    console.log(req.query);
+    console.log(req.url, req.query);
     jwt.verify(req.query?.code, getKey, {}, async function ( err, decoded ) {
         res.json({err, decoded})
     });
