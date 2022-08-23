@@ -4,7 +4,7 @@ import { Flex, Button, Heading, Text, useDisclosure, Input, Progress, IconButton
 import TelegramLoginButton from 'react-telegram-login';
 import NavBar from "@/components/Navbar";
 import { RainbowContext } from "@/contexts/RainbowContext";
-import { AadharIcon, DiscordIcon, SlackIcon, SpotifyIcon, TelegramIcon, TwitchIcon, UnstoppableIcon, WorldcoinIcon, ZoomIcon } from "@/public/icons";
+import { AadharIcon, DiscordIcon, SlackIcon, SpotifyIcon, TelegramIcon, TwitchIcon, WorldcoinIcon, ZoomIcon } from "@/public/icons";
 import { isAddress } from "ethers/lib/utils";
 import {
   Modal,
@@ -22,13 +22,6 @@ import { Wrap } from "@chakra-ui/react";
 import CardShell2 from "@/components/CardShell2";
 import Image from "next/image";
 import SimpleButton from "@/components/SimpleButton";
-import UAuth from '@uauth/js'
-
-const uauth = new UAuth({
-  clientID: "3e99b06b-679a-4706-87b0-15dff22e5122",
-  redirectUri: "http://localhost:8000/api/uauthcb",
-  scope: "openid wallet email:optional humanity_check:optional"
-})
 
 export default function Home() {
 
@@ -347,29 +340,6 @@ export default function Home() {
                     bridgeData={bridgeData}
                     disconnectAuth={disconnectAuth}
                     loadingType={loadingType}
-                  />
-                  <CardShell2
-                    icon={ <UnstoppableIcon boxSize={9} />}
-                    title="Unstoppable"
-                    cardKey="unstoppable"
-                    authFn={async ()=>{
-                      const authorization = await uauth.loginWithPopup();
-                      const domainName = authorization?.idToken?.sub;
-                      const walletAddress = authorization?.idToken?.wallet_address;
-                      const emailAddress = authorization?.idToken?.email;
-                      console.log(domainName, walletAddress, emailAddress);
-                      // let resp = await uauth?.user();
-                      // if (!resp){
-                      // }
-                      // else {
-                      //   // console.log('user', resp);
-                      // }
-                    }}
-                    accent='#4c47f7'
-                    bridgeData={bridgeData}
-                    disconnectAuth={disconnectAuth}
-                    loadingType={loadingType}
-                    disabled={false}
                   />
 
                   <CardShell accent='#0088CC' icon={ <TelegramIcon boxSize={9} />} title="Telegram">
