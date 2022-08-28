@@ -14,17 +14,18 @@ const { chains, provider } = configureChains(
 )
 
 const { connectors } = getDefaultWallets({ appName: "Convo Bridge", chains })
-const wagmiClient = createClient({ autoConnect: true, connectors, provider })
+const wagmiClient = createClient({ connectors, provider })
 
 export const RainbowContext = createContext(undefined);
 
 export const RainbowContextProvider = ({children}) => {
 
     return (
-		<WagmiConfig client={wagmiClient} coolMode>
+		<WagmiConfig client={wagmiClient}>
 			<RainbowKitProvider
                 coolMode
                 chains={chains}
+
                 theme={useColorModeValue(lightTheme({
                     borderRadius: 'large',
                     overlayBlur: 'small',

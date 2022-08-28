@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port=8000",
+    "dev": "next dev --port=8001",
     "build": "next build",
     "start": "next start",
     "export": "next export",
     "lint": "next lint",
-    "tunnel": "ngrok http 8000"
+    "tunnel": "ngrok http 8001"
   },
   "dependencies": {
     "@callowcreation/basic-twitch-oauth": "^1.0.12",
-    "@chakra-ui/icons": "^2.0.8",
-    "@chakra-ui/react": "^2.2.8",
+    "@chakra-ui/icons": "^2.0.9",
+    "@chakra-ui/react": "^2.2.9",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@rainbow-me/rainbowkit": "^0.5.0",
@@ -27,12 +27,12 @@
     "@worldcoin/id": "^0.8.0",
     "critters": "^0.0.16",
     "ethers": "^5.7.0",
-    "framer-motion": "7.2.0",
+    "framer-motion": "7.2.1",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.1.4",
     "next": "12.2.5",
     "next-compose-plugins": "^2.2.1",
-    "next-pwa": "^5.5.5",
+    "next-pwa": "^5.6.0",
     "next-transpile-modules": "^9.0.0",
     "node-fetch": "3.2.10",
     "react": "18.2.0",
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.2.5",
-    "eslint": "8.22.0",
+    "eslint": "8.23.0",
     "eslint-config-next": "12.2.5"
   }
 }

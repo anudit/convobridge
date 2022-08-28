@@ -55,13 +55,13 @@ const GlobalStyle = ({ children }) => {
 const App = ({ Component, pageProps }) => {
   return (
       <ChakraProvider theme={customTheme} resetCSS>
-    <RainbowContextProvider>
+        <RainbowContextProvider>
           <GlobalStyle/>
           <Head>
             <meta name="viewport" content="width=device-width, initial-scale=1" />
           </Head>
           <Component {...pageProps} />
-    </RainbowContextProvider>
+        </RainbowContextProvider>
       </ChakraProvider>
   )
 }

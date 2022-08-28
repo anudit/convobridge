@@ -10,12 +10,13 @@ const ButtonShell = ({children, ...props}) =>{
     )
 }
 
-const SimpleButton = ({accent, onClick, children, loadingType='', type='connect'}) => {
+const SimpleButton = ({accent, onClick, children, isLoading, type='connect', hint=""}) => {
     if (type === 'connect'){
         return (
             <ButtonShell
-                title="Connect Account"
+                title={`Connect ${hint}`}
                 onClick={onClick}
+                isLoading={isLoading}
                 backgroundColor={accent}
                 _hover={{backgroundColor: accent, transform: 'scale(1.05)'}}
             >
@@ -26,9 +27,9 @@ const SimpleButton = ({accent, onClick, children, loadingType='', type='connect'
     else if (type === 'disconnect'){
         return (
             <ButtonShell
-                title="Disconnect"
+                title={`Disconnect ${hint}`}
                 onClick={onClick}
-                isLoading={loadingType === 'unstoppable'}
+                isLoading={isLoading}
                 backgroundColor={accent}
                 _hover={{backgroundColor:"#d9534f", transform: 'scale(1.05)'}} // red
             >

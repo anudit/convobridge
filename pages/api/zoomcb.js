@@ -42,7 +42,7 @@ export default async (req, res) => {
 
     let { state : ethAddress } = req.query;
     // console.log(ethAddress);
-    // console.log(zoomData);
+    console.log(zoomData);
 
     await updateAuthData('zoom', ethAddress, zoomData);
     return res.status(200).redirect('/');

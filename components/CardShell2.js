@@ -22,6 +22,7 @@ const CardShell2 = ({icon, title, cardKey, bridgeData, accent, authFn, disconnec
               type="disconnect"
               isLoading={loadingType === cardKey}
               onClick={disconnectAuth}
+              hint={title}
             >
               {typeof bridgeData[cardKey] === 'string' ? truncateAddress(bridgeData[cardKey]) : 'Verified'}
             </SimpleButton>
