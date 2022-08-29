@@ -1,39 +1,56 @@
 import { deleteAuthData, getBridgeData, updateAuthData } from '@/lib/bridge';
+import { isAddress } from 'ethers/lib/utils';
+import { unstable_getServerSession } from 'next-auth';
+import { getAuthOptions } from './auth/[...nextauth]';
 
 export default async (req, res) => {
 
     try {
 
-        const { address } = req.query;
-        if (req.method === "GET" && Boolean(address) === true) {
+        let session = await unstable_getServerSession(req, res, getAuthOptions(req));
 
-            const snapshot = await getBridgeData(req.query?.address);
-            return res.status(200).json(snapshot);
-
+        if (session === null){
+            return res.status(403).json({success : false, message: "Please Sign-In first."});
         }
-        else if (req.method === "POST"){
+        else if(Boolean(session?.user) === true && isAddress(session?.user?.name) === true){
 
-            const { type, ethAddress } = req.query;
-            const telegramData = req.body;
+            const address = session?.user?.name;
+            if (req.method === "GET" && Boolean(address) === true) {
 
-            if (type === 'telegram') {
-                await updateAuthData(type, ethAddress, telegramData);
-                return res.status(200).json({success : true});
+                const snapshot = await getBridgeData(address);
+                return res.status(200).json(snapshot);
+
             }
+            else if (req.method === "POST"){
 
-        }
-        else if (req.method === "DELETE"){
+                const { type } = req.query;
+                const telegramData = req.body;
 
-            const { type, ethAddress } = req.query;
+                if (type === 'telegram') {
+                    await updateAuthData(type, address, telegramData);
+                    return res.status(200).json({success : true});
+                }
 
-            let resp = await deleteAuthData(type, ethAddress)
-            return res.status(200).json({success : resp});
+            }
+            else if (req.method === "DELETE"){
 
+                const { type } = req.query;
+
+                let resp = await deleteAuthData(type, address)
+                return res.status(200).json({success : resp});
+
+            }
+            else {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid Request"
+                });
+            }
         }
         else {
             return res.status(400).json({
                 success: false,
-                message: "Invalid Request"
+                message: "Invalid Session State"
             });
         }
 

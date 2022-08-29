@@ -7,6 +7,7 @@ import { midnightTheme, getDefaultWallets, RainbowKitProvider } from '@rainbow-m
 import { useColorModeValue } from '@chakra-ui/react'
 import { lightTheme } from '@rainbow-me/rainbowkit'
 
+import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth';
 
 const { chains, provider } = configureChains(
 	[chain.mainnet],
@@ -16,30 +17,36 @@ const { chains, provider } = configureChains(
 const { connectors } = getDefaultWallets({ appName: "Convo Bridge", chains })
 const wagmiClient = createClient({ connectors, provider })
 
+const getSiweMessageOptions = () => ({
+    statement: 'Sign in to Convo - Bridge',
+  });
+
 export const RainbowContext = createContext(undefined);
 
 export const RainbowContextProvider = ({children}) => {
 
     return (
 		<WagmiConfig client={wagmiClient}>
-			<RainbowKitProvider
-                coolMode
-                chains={chains}
+            <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
+                <RainbowKitProvider
+                    coolMode
+                    chains={chains}
 
-                theme={useColorModeValue(lightTheme({
-                    borderRadius: 'large',
-                    overlayBlur: 'small',
-                }), midnightTheme({
-                    connectButtonBackground: '#0000',
-                    accentColorForeground: 'white',
-                    borderRadius: 'large',
-                    overlayBlur: 'small',
-                }))}
-            >
-                <RainbowKit>
-                    {children}
-                </RainbowKit>
-			</RainbowKitProvider>
+                    theme={useColorModeValue(lightTheme({
+                        borderRadius: 'large',
+                        overlayBlur: 'small',
+                    }), midnightTheme({
+                        connectButtonBackground: '#0000',
+                        accentColorForeground: 'white',
+                        borderRadius: 'large',
+                        overlayBlur: 'small',
+                    }))}
+                >
+                    <RainbowKit>
+                        {children}
+                    </RainbowKit>
+                </RainbowKitProvider>
+            </RainbowKitSiweNextAuthProvider>
 		</WagmiConfig>
 	)
 

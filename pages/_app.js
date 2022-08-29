@@ -5,7 +5,7 @@ import Head from 'next/head'
 
 import customTheme from '@/styles/theme';
 import { RainbowContextProvider } from '@/contexts/RainbowContext';
-
+import { SessionProvider } from 'next-auth/react';
 
 const GlobalStyle = ({ children }) => {
   return (
@@ -52,18 +52,22 @@ const GlobalStyle = ({ children }) => {
   );
 };
 
+
+
 const App = ({ Component, pageProps }) => {
   return (
-      <ChakraProvider theme={customTheme} resetCSS>
-        <RainbowContextProvider>
-          <GlobalStyle/>
-          <Head>
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-          </Head>
-          <Component {...pageProps} />
-        </RainbowContextProvider>
-      </ChakraProvider>
-  )
+      <SessionProvider refetchInterval={0} session={pageProps.session}>
+        <ChakraProvider theme={customTheme} resetCSS>
+          <RainbowContextProvider>
+            <GlobalStyle/>
+            <Head>
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
+            <Component {...pageProps} />
+          </RainbowContextProvider>
+        </ChakraProvider>
+      </SessionProvider>
+    )
 }
 
 export default App
