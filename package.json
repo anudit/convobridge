@@ -13,22 +13,22 @@
   "dependencies": {
     "@callowcreation/basic-twitch-oauth": "^1.0.12",
     "@chakra-ui/icons": "^2.0.9",
-    "@chakra-ui/react": "^2.2.9",
-    "@emotion/react": "^11.10.0",
-    "@emotion/styled": "^11.10.0",
-    "@rainbow-me/rainbowkit": "^0.5.0",
-    "@rainbow-me/rainbowkit-siwe-next-auth": "^0.1.0",
+    "@chakra-ui/react": "^2.3.2",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@rainbow-me/rainbowkit": "^0.5.1",
+    "@rainbow-me/rainbowkit-siwe-next-auth": "^0.1.1",
     "@simplewebauthn/browser": "^6.0.0",
-    "@simplewebauthn/server": "^6.2.0",
+    "@simplewebauthn/server": "6.3.0-alpha.0",
     "@textile/hub": "^6.3.4",
     "@walletconnect/web3-provider": "^1.8.0",
     "@worldcoin/id": "^0.8.0",
     "critters": "^0.0.16",
     "ethers": "^5.7.0",
-    "framer-motion": "7.2.1",
+    "framer-motion": "7.3.2",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^2.1.4",
-    "next": "12.2.5",
+    "next": "12.3.0",
     "next-auth": "^4.10.3",
     "next-compose-plugins": "^2.2.1",
     "next-pwa": "^5.6.0",
@@ -38,11 +38,11 @@
     "react-dom": "18.2.0",
     "react-telegram-login": "^1.1.2",
     "siwe": "^1.1.6",
-    "wagmi": "^0.6.4"
+    "wagmi": "^0.6.5"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^12.2.5",
+    "@next/eslint-plugin-next": "^12.3.0",
     "eslint": "8.23.0",
-    "eslint-config-next": "12.2.5"
+    "eslint-config-next": "12.3.0"
   }
 }
